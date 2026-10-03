@@ -4,19 +4,19 @@ test('valid checkbox', async ({ page }) => {
   await page.goto('https://the-internet.herokuapp.com/checkboxes');
 
     // Check first item.
-    const firstTodo = page.getByTestId('todo-item').nth(0);
-    await firstTodo.getByRole('checkbox').check();
+    const firstTodo = page.getByRole('checkbox').first()
+    await firstTodo.check();
     //await firstTodo.getByRole('checkbox').uncheck();
-    await expect(firstTodo).toHaveClass('completed');
 
     // Check second item.
-    const secondTodo = page.getByTestId('todo-item').nth(1);
-    await expect(secondTodo).not.toHaveClass('completed');
-    await secondTodo.getByRole('checkbox').check();
+    const secondTodo = page.getByRole('checkbox').nth(1);
+    await expect(secondTodo).not.toHaveClass('checked');
+    await secondTodo.check();
 
     // Assert completed class.
-    await expect(firstTodo).toHaveClass('completed');
-    await expect(secondTodo).toHaveClass('completed');
+    await expect(firstTodo).toBeChecked();
+    await expect(secondTodo).toBeChecked();
+
 })
 
 test('valid dropdown', async ({ page }) => {
