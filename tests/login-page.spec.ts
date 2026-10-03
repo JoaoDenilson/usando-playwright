@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.goto('https://www.saucedemo.com/');
+});
+
 // Test suite for login page functionality
 // Success login
 test.describe('Login Page success', () => {          
   test('check login functionality', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
     await page.getByTestId('username').fill('standard_user');
     await page.getByTestId('password').fill('secret_sauce');
     await page.getByTestId('login-button').click();
@@ -18,8 +21,7 @@ test.describe('Login Page success', () => {
 
 test.describe('Login page failed', () => {  
   //User locked out
-  test('check login functionality - locked out user', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');    
+  test('check login functionality - locked out user', async ({ page }) => {    
     const errolabel = await page.locator('[data-test="error"]');
     await expect(errolabel).not.toBeVisible();
 
@@ -33,8 +35,7 @@ test.describe('Login page failed', () => {
   });
 
   //Wrong password
-  test('check login functionality - wrong password', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');     
+  test('check login functionality - wrong password', async ({ page }) => { 
     const errolabel = await page.locator('[data-test="error"]');
     await expect(errolabel).not.toBeVisible();
 
@@ -44,5 +45,10 @@ test.describe('Login page failed', () => {
       
     await expect(errolabel).toHaveText('Epic sadface: Username and password do not match any user in this service');
     await expect(errolabel).toBeVisible();
+  });
+
+  test.afterAll(async ({ page }) => {
+    await page.close();
+    console.log('All tests completed.');
   });
 });
